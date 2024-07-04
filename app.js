@@ -10,63 +10,96 @@ function getComputerChoice() {
   }
 
 
-function getHumanChoice () {
-    let userInput = prompt("rock, paper, or scissors");
-    return userInput.toLowerCase();
-}
 
 let humanScore = 0;
 let computerScore = 0;
 
-function playGame() {
-    
-    let countRound = 0;
+let countRound = 0;
 
-        function playRound(humanChoice, computerChoice) {
+let buttons = document.querySelectorAll(".userChoice");
+let result = document.querySelector(".result");
 
-            console.log(`Computer choice: ${computerChoice}`);
-            console.log(`Your choice: ${humanChoice}`)
-            if (humanChoice == computerChoice) {
-                countRound++;
-                
-                console.log(`You both tied. Your score: ${humanScore}. Computer score ${computerScore}`);
-                console.log(`Current round ${countRound}`);
-            }
+buttons.forEach(btn => {
+    btn.addEventListener('click', event => {
+        playRound(event.target.id, getComputerChoice());
+        console.log(countRound);
+    });
+ });
 
-            if ((humanChoice == "rock" && computerChoice == "scissors") || 
-            (humanChoice == "paper" && computerChoice == "rock") || 
-            (humanChoice == "scissors" && computerChoice == "paper"))
-            {
-                humanScore++;
-                countRound++;
-                console.log(`You win! ${humanChoice} beats ${computerChoice}`)
-                console.log(`Your score ${humanScore} - Computer score ${computerScore} - Current round ${countRound}`);
-            } else if ((computerChoice == "rock" && humanChoice == "scissors") || 
-            (computerChoice == "paper" && humanChoice == "rock") || 
-            (computerChoice == "scissors" && humanChoice =="paper")){
-                computerScore++;
-                countRound++;
-                console.log(`You lose! ${computerChoice} beats ${humanChoice}`);
-                console.log(`Your score ${humanScore} - Computer score ${computerScore} - Current round ${countRound}`);
-            }
-        }
 
-        
-    
 
-    for (let i = 1; i <= 5; i++) {
-        const humanSelection = getHumanChoice();
-        const computerSelection = getComputerChoice();
-        playRound(humanSelection, computerSelection);
+function playRound(humanChoice, computerChoice){
+    if (countRound > 4) {
+        humanChoice = "";
+        computerChoice = "";
+        humanScore = 0;
+        computerScore = 0;
+        countRound = 0;
     }
-}
 
-playGame();
+    if (humanChoice == computerChoice) {
+        countRound++;
+        
+        result.innerHTML = `Computer choice: ${computerChoice} <br>
+        Your choice: ${humanChoice} <br>
+        You both tied! <br>
+        Your score: ${humanScore}. <br>
+        Computer score: ${computerScore}. <br>
+        Current round: ${countRound} <br>`; 
+    }
 
-if (humanScore == computerScore) {
-    console.log("Game Tied!") ;
-} else if (humanScore > computerScore) {
-    console.log("You won!");
-} else {
-    console.log("Computer won!");
+    if ((humanChoice == "rock" && computerChoice == "scissors") || 
+    (humanChoice == "paper" && computerChoice == "rock") || 
+    (humanChoice == "scissors" && computerChoice == "paper"))
+    {
+        humanScore++;
+        countRound++;
+
+        result.innerHTML = `Computer choice: ${computerChoice} <br>
+        Your choice: ${humanChoice}. <br>
+        You win! ${humanChoice} beats ${computerChoice}. <br> 
+        Your score: ${humanScore} <br>
+        Computer score: ${computerScore} <br>
+        Current round: ${countRound}`;
+    } else if ((computerChoice == "rock" && humanChoice == "scissors") || 
+    (computerChoice == "paper" && humanChoice == "rock") || 
+    (computerChoice == "scissors" && humanChoice =="paper")){
+        computerScore++;
+        countRound++;
+
+        result.innerHTML = `Computer choice: ${computerChoice} <br>
+        Your choice: ${humanChoice}. <br>
+        You lose! ${computerChoice} beats ${humanChoice}. <br>
+        Your score: ${humanScore} <br>
+        Computer score: ${computerScore} <br>
+        Current round: ${countRound} <br>`;
+    }
+
+    if (countRound == 5) {
+        if (humanScore == 5) {
+            result.innerHTML = `Computer choice: ${computerChoice} <br>
+            Your choice: ${humanChoice} <br>
+            You both tied! <br>
+            Your score: ${humanScore}. <br>
+            Computer score: ${computerScore}. <br>
+            Current round: ${countRound} <br>
+            Final winner: Game Tied`;
+        } else if (humanScore > computerScore) {
+            result.innerHTML = `Computer choice: ${computerChoice} <br>
+            Your choice: ${humanChoice} <br>
+            You both tied! <br>
+            Your score: ${humanScore}. <br>
+            Computer score: ${computerScore}. <br>
+            Current round: ${countRound} <br>
+            Final winner: "You won!`;
+        } else {
+            result.innerHTML = `Computer choice: ${computerChoice} <br>
+            Your choice: ${humanChoice} <br>
+            You both tied! <br>
+            Your score: ${humanScore}. <br>
+            Computer score: ${computerScore}. <br>
+            Current round: ${countRound} <br>
+            Final winner: Computer won!`;
+        }
+    }
 }
